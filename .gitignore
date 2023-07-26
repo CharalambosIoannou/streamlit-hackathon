@@ -1,0 +1,3 @@
+.streamlit/
+Pipfile.lock
+__pycache__/
