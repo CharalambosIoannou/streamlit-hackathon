@@ -8,9 +8,6 @@ import json
 
 
 class SupabaseConnection(ExperimentalBaseConnection[supabase.create_client]):
-    '''Connection implementation for Supabase'''
-
-
     def _connect(_self, **kwargs) -> supabase.create_client:
 
         SupabaseConnection.db = st.secrets["supabase_database"]
@@ -23,12 +20,12 @@ class SupabaseConnection(ExperimentalBaseConnection[supabase.create_client]):
         return self._instance.table("q_a")
 
     @st.cache_data
-    def query(_self, filter: str = "*", ttl: int = 600, **kwargs) -> pd.DataFrame:
+    def query(_self) -> pd.DataFrame:
         cursor = _self.cursor()
         result=cursor.select("*").execute()
         return pd.DataFrame(result.data)
     
-    def insert(_self, data, ttl: int = 3600, **kwargs):
+    def insert(_self, data):
         # data = """{"question": "a", "answer": "b", "difficulty": 1}"""
         data1 = json.loads(data)
         print(data1)
@@ -37,6 +34,3 @@ class SupabaseConnection(ExperimentalBaseConnection[supabase.create_client]):
         return result
     
        
-
-# conn = st.experimental_connection("supabase", type=SupabaseConnection, st_module=st)
-# conn.insert(data = {})
